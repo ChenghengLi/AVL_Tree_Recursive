@@ -34,6 +34,7 @@ public:
     float feesInTotal() const;
     float feesSinceTime(string date) const;
     float feesInTimeInterval(pair<string, string> interval) const;
+    float queries_calculator(string file_path);
 private:
     float sellingFee;
     float buyingFee;

@@ -6,7 +6,7 @@
 
 /* 
  * File:   main.cpp
- * Author: li471
+ * Author: Chengheng Li Chen
  *
  * Created on 20 de abril de 2021, 11:41
  */
@@ -122,6 +122,13 @@ bool isNext(string data_1, string data_2) {
     return (abs(d_1 - d_2) == 1);
 }
 
+/**
+ * ALternativa al opción 9 si no se implementa un método dentro del tTAD
+ * @param file_path archivo
+ * @param interval intervalo
+ * @param tm transacciones
+ * @return tasas
+ */
 float option_9(string file_path, pair<string, string> interval, TransactionManagerAVL& tm) {
     float fee_total = 0;
     fstream fichero;
@@ -154,9 +161,9 @@ int main(int argc, char** argv) {
     float fee;
     chrono::steady_clock::time_point begin, end;
     vector<string> arr_options = {"Ruta fitxer",
-        "Mostra transaccions de més nous a antics",
         "Mostra transaccions de més antics a nous",
-        "Mostrar la transaccio més nou",
+        "Mostra transaccions de més  nous a antics",
+        "Mostrar la transaccio més nova",
         "Mostra la transaccio més antiga",
         "Mostra comissió de totes les transaccions",
         "Mostra la comissió a partir d'una dada determinada",
@@ -180,11 +187,11 @@ int main(int argc, char** argv) {
                             >(end - begin).count() << " ms." << endl;
                     break;
                 case 2:
-                    cout << "Lestransaccions en ordre de més nou a més antic són: \n\n";
+                    cout << "Lestransaccions en ordre de més antic a más nous: \n\n";
                     newTransaccio.showAll();
                     break;
                 case 3:
-                    cout << "Lestransaccions en ordre de més antic a més nou són: \n\n";
+                    cout << "Lestransaccions en ordre de més nou a més antic són: \n\n";
                     newTransaccio.showAllReverse();
                     break;
                 case 4:
@@ -233,12 +240,12 @@ int main(int argc, char** argv) {
                     cin >> input;
                     fee = 0;
                     begin = chrono::steady_clock::now();
-                    fee = option_9(input, par, newTransaccio);
+                    fee = newTransaccio.queries_calculator(input);
+                    //fee = option_9(input, par, newTransaccio);
                     end = chrono::steady_clock::now();
                     cout << fixed << setprecision(2) << "El balaç ix a : " << fee << "€" << endl;
                     cout << "\nTemps transcorregut: " << chrono::duration_cast<chrono::milliseconds
                             >(end - begin).count() << " ms." << endl;
-
                     break;
                 case 10:
                     cout << "Sortint..." << endl << endl;

@@ -69,10 +69,12 @@ void TransactionManagerAVL::showAll() const {
                 temp_node = temp.top();
                 temp.pop();
                 vector<Transaction> vect = temp_node->getValues();
+                cout << "| ";
                 for (int i = 0; i < vect.size(); i++) {
                     vect[i].print();
-                    cout << endl;
+                    cout << " | ";
                 }
+                cout << endl;
                 temp_node = temp_node->getRight();
                 comptador++;
                 if (comptador == fi) {
@@ -111,7 +113,11 @@ void TransactionManagerAVL::showAll_recursive(int& comptador, int& fi, BinaryTre
     }
 }*/
 
-
+/**
+ * Comprueba si un archivo existe
+ * @param name nombre de archivo
+ * @return si existe
+ */
 int TransactionManagerAVL::fileExists(string const& name) {
     ifstream f(name.c_str());
     if (!f.good())
@@ -119,6 +125,12 @@ int TransactionManagerAVL::fileExists(string const& name) {
     return 0;
 }
 
+/**
+ * Splitter
+ * @param _string string para splittear
+ * @param delimiter delimitador
+ * @param output vector splitteado
+ */
 void TransactionManagerAVL::splitter(string const & _string, const char delimiter, vector<string> &output) {
     stringstream string_s(_string);
     string save;
@@ -166,12 +178,18 @@ void TransactionManagerAVL::loadFromFile(string file_path) {
  * Coste O(h) donde h es la altura del árbol
  */
 void TransactionManagerAVL::showOldest() const {
-    BinaryTreeNode<string, Transaction> *temp = this->p_root;
-    while (temp->hasLeft())
-        temp = temp->getLeft();
-    vector<Transaction> vect = temp->getValues();
-    for (int i = 0; i < vect.size(); i++) {
-        vect[i].print();
+    if (isEmpty()) {
+        cout << "Encara no hi ha transaccions" << endl;
+    } else {
+        BinaryTreeNode<string, Transaction> *temp = this->p_root;
+        while (temp->hasLeft())
+            temp = temp->getLeft();
+        vector<Transaction> vect = temp->getValues();
+        cout << "| ";
+        for (int i = 0; i < vect.size(); i++) {
+            vect[i].print();
+            cout << " | ";
+        }
         cout << endl;
     }
 }
@@ -182,12 +200,18 @@ void TransactionManagerAVL::showOldest() const {
  * Coste O(h) donde h es la altura del árbol
  */
 void TransactionManagerAVL::showNewest() const {
-    BinaryTreeNode<string, Transaction> *temp = this->p_root;
-    while (temp->hasRight())
-        temp = temp->getRight();
-    vector<Transaction> vect = temp->getValues();
-    for (int i = 0; i < vect.size(); i++) {
-        vect[i].print();
+    if (isEmpty()) {
+        cout << "Encara no hi ha transaccions" << endl;
+    } else {
+        BinaryTreeNode<string, Transaction> *temp = this->p_root;
+        while (temp->hasRight())
+            temp = temp->getRight();
+        vector<Transaction> vect = temp->getValues();
+        cout << "| ";
+        for (int i = 0; i < vect.size(); i++) {
+            vect[i].print();
+            cout << " | ";
+        }
         cout << endl;
     }
 }
@@ -224,10 +248,12 @@ void TransactionManagerAVL::showAllReverse() const {
                 temp_node = temp.top();
                 temp.pop();
                 vector<Transaction> vect = temp_node->getValues();
+                cout << "| ";
                 for (int i = 0; i < vect.size(); i++) {
                     vect[i].print();
-                    cout << endl;
+                    cout << " | ";
                 }
+                cout << endl;
                 temp_node = temp_node->getLeft();
                 comptador++;
                 if (comptador == fi) {
@@ -403,8 +429,39 @@ float TransactionManagerAVL::feesSinceTime(string date) const {
     return feesSinceTime("0");
 }*/
 
-
-
+/**
+ * Calcula los queries
+ * 
+ * O(nh) en el peores de los casos n líneas del fichero y h altura del árbol
+ * 
+ * @param file_path fichero
+ * @return tasas
+ */
+float TransactionManagerAVL::queries_calculator(string file_path) {
+    float tases = 0;
+    fstream fichero;
+    string input;
+    //Programa principal
+    fileExists(file_path);
+    fichero.open(file_path);
+    cout << "Reading file " << file_path << "...\n\n";
+    while (!fichero.eof()) {
+        //Llegida de la linea
+        getline(fichero, input);
+        try {
+            vector<Transaction> vect = valuesOf(input);
+            for (int i = 0; i < vect.size(); i++) {
+                if (vect[i].getQuantitat() < 0)
+                    tases += buyingFee * vect[i].getQuantitat()*-1;
+                else
+                    tases += sellingFee * vect[i].getQuantitat();
+            }
+        } catch (exception& e) {
+        }
+    }
+    fichero.close();
+    return tases;
+}
 
 
 

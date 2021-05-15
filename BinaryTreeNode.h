@@ -66,6 +66,10 @@ using namespace std;
 #include <iostream>
 #include <ratio>
 
+/**
+ * Constructor de BinaryTreeNode
+ * @param _key key del nodo
+ */
 template <class K, class V>
 BinaryTreeNode<K, V>::BinaryTreeNode(const K& _key) {
     key = _key;
@@ -75,6 +79,11 @@ BinaryTreeNode<K, V>::BinaryTreeNode(const K& _key) {
     _height = 0;
 }
 
+/**
+ * Constructor cópia
+ * 
+ * @param orig nodo original
+ */
 template <class K, class V>
 BinaryTreeNode<K, V>::BinaryTreeNode(const BinaryTreeNode<K, V>& orig) {
     key = orig.key;
@@ -92,6 +101,9 @@ BinaryTreeNode<K, V>::BinaryTreeNode(const BinaryTreeNode<K, V>& orig) {
     }
 }
 
+/**
+ * Destructor
+ */
 template <class K, class V>
 BinaryTreeNode<K, V>::~BinaryTreeNode() {
     if (right != nullptr)
@@ -99,22 +111,34 @@ BinaryTreeNode<K, V>::~BinaryTreeNode() {
     if (left != nullptr)
         delete left;
 }
-
+/**
+ * Añade un valor
+ * @param v valor a añadir
+ */
 template<class K, class V>
 void BinaryTreeNode<K, V>::addValue(const V& v) {
     this->values.push_back(v);
 }
-
+/**
+ * Getter del key
+ * @return 
+ */
 template<class K, class V>
 const K& BinaryTreeNode<K, V>::getKey() const {
     return key;
 }
-
+/**
+ * Getter de los valores
+ * @return vector de valores
+ */
 template<class K, class V>
 const vector<V>& BinaryTreeNode<K, V>::getValues() const {
     return this->values;
 }
-
+/**
+ * Profundidad del nodo
+ * @return profundidad
+ */
 template<class K, class V>
 int BinaryTreeNode<K, V>::depth() const {
     if (isRoot())
@@ -123,27 +147,42 @@ int BinaryTreeNode<K, V>::depth() const {
         return 1 + pare->depth();
     }
 }
-
+/**
+ * Comprueba si tiene hijo derecho
+ * @return true si tiene, false si no tiene
+ */
 template<class K, class V>
 bool BinaryTreeNode<K, V>::hasLeft() const {
     return !(this->left == nullptr);
 }
-
+/**
+ * Comprueba si tiene hijo izquierdo
+ * @return true si tiene, false si no tiene
+ */
 template<class K, class V>
 bool BinaryTreeNode<K, V>::hasRight() const {
     return !(this->right == nullptr);
 }
-
+/**
+ * Comprueba si es una hoja
+ * @return true si tiene, false si no tiene
+ */
 template<class K, class V>
 bool BinaryTreeNode<K, V>::isLeaf() const {
     return (!(hasRight() or hasLeft()));
 }
-
+/**
+ * Comprueba si es el root
+ * @return true si tiene, false si no tiene
+ */
 template<class K, class V>
 bool BinaryTreeNode<K, V>::isRoot() const {
     return (this->pare == nullptr);
 }
-
+/**
+ * Calcula la altura del nodo
+ * @return altrura
+ */
 template<class K, class V>
 int BinaryTreeNode<K, V>::height() const {
     int r = 0, l = 0;
@@ -156,47 +195,75 @@ int BinaryTreeNode<K, V>::height() const {
     else
         return l + 1;
 }
-
+/**
+ * modificacion del operador ==
+ * @param node nodo a comparar
+ * @return si son iguales
+ */
 template<class K, class V>
 bool BinaryTreeNode<K, V>::operator==(const BinaryTreeNode<K, V>& node) const {
     return (values == node.getValues() and key == node.getKey());
 }
-
+/**
+ * Devuelve el nodo izquierdo
+ * @return nodo izq
+ */
 template<class K, class V>
 BinaryTreeNode<K, V>* BinaryTreeNode<K, V>::getLeft() {
     return left;
 }
-
+/**
+ * Devuelve el nodo padre
+ * @return nodo padre
+ */
 template<class K, class V>
 BinaryTreeNode<K, V>* BinaryTreeNode<K, V>::getPare() {
     return pare;
 }
-
+/**
+ * Devueve el nodo derecho
+ * @return nodo der
+ */
 template<class K, class V>
 BinaryTreeNode<K, V>* BinaryTreeNode<K, V>::getRight() {
     return right;
 }
-
+/**
+ * Setter del nodo izq
+ * @param _left nodo izq
+ */
 template<class K, class V>
 void BinaryTreeNode<K, V>::setLeft(BinaryTreeNode<K, V>* _left) {
     left = _left;
 }
-
+/**
+ * Setter del nodo padre
+ * @param _pare nodo padre
+ */
 template<class K, class V>
 void BinaryTreeNode<K, V>::setPare(BinaryTreeNode<K, V>* _pare) {
     pare = _pare;
 }
-
+/**
+ * Setter del nodo derecha
+ * @param _right nodo der
+ */
 template<class K, class V>
 void BinaryTreeNode<K, V>::setRight(BinaryTreeNode<K, V>* _right) {
     right = _right;
 }
-
+/**
+ * Setter del Heigth/Factor de balance
+ * @param n factor de balance
+ */
 template <class K, class V>
 void BinaryTreeNode<K, V>::setHeight(int n) {
     _height = n;
 }
-
+/**
+ * Getter del height/factor de balance
+ * @return factor del balance
+ */
 template <class K, class V>
 int BinaryTreeNode<K, V>::getHeight() const{
     return _height;

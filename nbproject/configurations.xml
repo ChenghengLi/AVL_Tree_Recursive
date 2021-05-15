@@ -15,10 +15,12 @@
                    projectFiles="true">
       <itemPath>Transaction.cpp</itemPath>
       <itemPath>TransactionManagerAVL.cpp</itemPath>
+      <itemPath>caso_de_prueba.txt</itemPath>
       <itemPath>largo_mezclados.txt</itemPath>
+      <itemPath>largo_ordenados.txt</itemPath>
       <itemPath>pequeno_mezclados.txt</itemPath>
+      <itemPath>pequeno_ordenados.txt</itemPath>
       <itemPath>queries.txt</itemPath>
-      <itemPath>transactions-cas_de_prova.txt</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -65,15 +67,19 @@
       </item>
       <item path="TransactionManagerAVL.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="caso_de_prueba.txt" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="largo_mezclados.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="largo_ordenados.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="pequeno_mezclados.txt" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="queries.txt" ex="false" tool="3" flavor2="0">
+      <item path="pequeno_ordenados.txt" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="transactions-cas_de_prova.txt" ex="false" tool="3" flavor2="0">
+      <item path="queries.txt" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -111,15 +117,19 @@
       </item>
       <item path="TransactionManagerAVL.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="caso_de_prueba.txt" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="largo_mezclados.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="largo_ordenados.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="pequeno_mezclados.txt" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="queries.txt" ex="false" tool="3" flavor2="0">
+      <item path="pequeno_ordenados.txt" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="transactions-cas_de_prova.txt" ex="false" tool="3" flavor2="0">
+      <item path="queries.txt" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

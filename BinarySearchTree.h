@@ -40,7 +40,7 @@ public:
 
     bool equals(const BinarySearchTree<K, V>& other) const;
     vector<BinaryTreeNode<K, V>*> getLeafs();
-//protected:
+    //protected:
     BinaryTreeNode<K, V>* p_root;
     BinaryTreeNode<K, V>* find(const K& k) const;
 private:
@@ -57,6 +57,9 @@ private:
 #include <iostream>
 using namespace std;
 
+/**
+ * Constructor por defecto
+ */
 template<class K, class V>
 BinarySearchTree<K, V>::BinarySearchTree() {
     p_root = nullptr;
@@ -64,12 +67,19 @@ BinarySearchTree<K, V>::BinarySearchTree() {
 
 }
 
+/**
+ * Constructor cópia
+ * @param orig orignal
+ */
 template<class K, class V>
 BinarySearchTree<K, V>::BinarySearchTree(const BinarySearchTree<K, V>& orig) {
     p_root = new BinaryTreeNode<V, K>(*orig.p_root);
     _size = orig._size;
 }
 
+/**
+ * Destructor de la clase
+ */
 template<class K, class V>
 BinarySearchTree<K, V>::~BinarySearchTree() {
     cout << "Destruint l'arbre" << endl;
@@ -77,27 +87,62 @@ BinarySearchTree<K, V>::~BinarySearchTree() {
     cout << "..." << endl << "Arbre binari destruit" << endl << endl;
 }
 
+/**
+ * Añade un nodo
+ * 
+ * O(h) on h és l'alçada de l'arbre, en el pitjor dels casos serà O(n)
+ * 
+ * @param k key 
+ * @param value valor
+ * @return nodo en el que se ha añadido el valor
+ */
 template<class K, class V>
 BinaryTreeNode<K, V>* BinarySearchTree<K, V>::add(const K& k, const V& value) {
     BinaryTreeNode<K, V> *newNode = new BinaryTreeNode<K, V>(k);
     newNode->addValue(value);
+    //Si está vacío se lo asigna al root
     if (p_root == nullptr)
         p_root = newNode;
+    //Añade el nodo por el medio del árbol
     else {
-        BinaryTreeNode<K, V>* temp = leave_finder(k, p_root);
-        if (temp == nullptr) {
-            delete newNode;
-            throw invalid_argument("Key exists");
-        } else if (temp->getKey() > k) {
-            temp->setLeft(newNode);
-        } else {
-            temp->setRight(newNode);
+        BinaryTreeNode<K, V>* temp = p_root;
+        bool parar = false;
+        while (temp != nullptr and !parar) {
+            if (temp->getKey() < k) {
+                if (temp->hasRight())
+                    temp = temp->getRight();
+                else {
+                    temp->setRight(newNode);
+                    newNode->setPare(temp);
+                    _size++;
+                }
+            } else if (temp->getKey() == k) {
+                temp->addValue(value);
+                delete newNode;
+                newNode = temp;
+                parar = true;
+            } else {
+                if (temp->hasLeft())
+                    temp = temp->getLeft();
+                else {
+                    temp->setLeft(newNode);
+                    newNode->setPare(temp);
+                    _size++;
+                }
+            }
         }
-        newNode->setPare(temp);
     }
-    _size++;
+    return newNode;
 }
 
+/**
+ * Retorna si conté un key l'arbre
+ * 
+ * O(h) on h és l'alçada de l'arbre
+ * 
+ * @param k
+ * @return 
+ */
 template<class K, class V>
 bool BinarySearchTree<K, V>::has(const K& k) const {
     if (leave_finder(k) == nullptr)
@@ -106,6 +151,15 @@ bool BinarySearchTree<K, V>::has(const K& k) const {
         return false;
 }
 
+/**
+ * Busca el nodo donde añadir
+ * 
+ * O(h) on h és l'alçada de l'arbre
+ * 
+ * @param k key
+ * @param node nodo donde añadir
+ * @return nodo donde añadir
+ */
 template<class K, class V>
 BinaryTreeNode<K, V>* BinarySearchTree<K, V>::leave_finder(const K& k, BinaryTreeNode<K, V>* node) const {
     if (node->getKey() > k) {
@@ -121,9 +175,18 @@ BinaryTreeNode<K, V>* BinarySearchTree<K, V>::leave_finder(const K& k, BinaryTre
     }
 }
 
+/**
+ * Busca si un nodo con determinado key existe
+ * 
+ * O(h) donde h es la altura del árbol
+ * 
+ * @param k key
+ * @return el nodo si existe y nullptr si no
+ */
 template<class K, class V>
 BinaryTreeNode<K, V>* BinarySearchTree<K, V>::find(const K& k) const {
     BinaryTreeNode<K, V> *temp = p_root;
+    //Bucle while que se mueve a la derecha o a la izquierda dependiendo del key
     while (temp != nullptr and temp->getKey() != k) {
         if (temp->getKey() > k) {
             temp = temp ->getLeft();
@@ -134,6 +197,13 @@ BinaryTreeNode<K, V>* BinarySearchTree<K, V>::find(const K& k) const {
     return temp;
 }
 
+/**
+ * Recoge todos los nodos que son hojas
+ * 
+ * O(n) 
+ * 
+ * @return vector con las hojas del árbol
+ */
 template<class K, class V>
 vector<BinaryTreeNode<K, V>*> BinarySearchTree<K, V>::getLeafs() {
     vector<BinaryTreeNode<K, V>*> vector;
@@ -141,24 +211,52 @@ vector<BinaryTreeNode<K, V>*> BinarySearchTree<K, V>::getLeafs() {
     return vector;
 }
 
+/**
+ * Función auxiliar recursivo para hallar las hojas del árbol
+ * 
+ * O(n)
+ * 
+ * @param vector vector donde contiene las hojas
+ * @param n nodo recursivo
+ */
 template<class K, class V>
 void BinarySearchTree<K, V>::getLeafs(vector<BinaryTreeNode<K, V>*>& vector, BinaryTreeNode<K, V>* n) const {
+    //Si tiene nodo derecha revisa el modo
     if (n->hasLeft()) {
         getLeafs(vector, n->getLeft());
     }
+    //Si tiene nodo izquierda revisa el nodo
     if (n->hasRight()) {
         getLeafs(vector, n->getRight());
     }
+    //Si es una hoja lo añade al vector
     if (n->isLeaf()) {
         vector.push_back(n);
     }
 }
 
+/**
+ * Comprueba si dos árboles son iguales
+ * 
+ * O(n)
+ * 
+ * @param other el otro árbol
+ * @return si son iguales
+ */
 template<class K, class V>
 bool BinarySearchTree<K, V>::equals(const BinarySearchTree<K, V>& other) const {
     return equals_1(this->p_root, other.p_root);
 }
 
+/**
+ * Función auxiliar recursiva para comprovar si son iguales
+ * 
+ * O(n)
+ * 
+ * @param this_n nodo del propio árbol
+ * @param other_n nodo del otro árbol
+ * @return si son iguales
+ */
 template<class K, class V>
 bool BinarySearchTree<K, V>::equals_1(BinaryTreeNode<K, V>* this_n, BinaryTreeNode<K, V>* other_n) const {
     if (this_n == nullptr and other_n == nullptr)
@@ -170,16 +268,38 @@ bool BinarySearchTree<K, V>::equals_1(BinaryTreeNode<K, V>* this_n, BinaryTreeNo
     }
 }
 
+/**
+ * Comprueba si está vacío
+ * 
+ * O(1)
+ * 
+ * @return si está vacío
+ */
 template<class K, class V>
 bool BinarySearchTree<K, V>::isEmpty() const {
     return p_root == nullptr;
 }
 
+/**
+ * Calcular la altura del árbol
+ * 
+ * O(h) donde h es la altura del árbol
+ * 
+ * @return altura del árbol
+ */
 template<class K, class V>
 int BinarySearchTree<K, V>::height() const {
     return max_height(p_root);
 }
 
+/**
+ * Función auxiliar recursivo para calcular la altura máxima del árbol
+ * 
+ * O(h) donde h es la altura del árbol
+ * 
+ * @param node nodo recursivo
+ * @return altura del árbol
+ */
 template<class K, class V>
 int BinarySearchTree<K, V>::max_height(BinaryTreeNode<K, V>* node) const {
     if (node == nullptr)
@@ -195,6 +315,13 @@ int BinarySearchTree<K, V>::max_height(BinaryTreeNode<K, V>* node) const {
     }
 }
 
+/**
+ * Enseña la información del árbol de la forma LVR
+ * 
+ * O(n)
+ * 
+ * @param n nodo
+ */
 template<class K, class V>
 void BinarySearchTree<K, V>::showKeysInorder(BinaryTreeNode<K, V>* n) const {
     if (isEmpty())
@@ -221,8 +348,13 @@ void BinarySearchTree<K, V>::showKeysInorder(BinaryTreeNode<K, V>* n) const {
     }
 }
 
-
-
+/**
+ * Enseña la información del árbol de la forma LRV
+ * 
+ * O(n)
+ * 
+ * @param n nodo
+ */
 template<class K, class V>
 void BinarySearchTree<K, V>::showKeysPostorder(BinaryTreeNode<K, V>* n) const {
     if (isEmpty())
@@ -250,6 +382,13 @@ void BinarySearchTree<K, V>::showKeysPostorder(BinaryTreeNode<K, V>* n) const {
     }
 }
 
+/**
+ * Enseña la información del árbol de la forma VLR
+ * 
+ * O(n)
+ * 
+ * @param n nodo
+ */
 template<class K, class V>
 void BinarySearchTree<K, V>::showKeysPreorder(BinaryTreeNode<K, V>* n) const {
     if (isEmpty())
@@ -276,15 +415,28 @@ void BinarySearchTree<K, V>::showKeysPreorder(BinaryTreeNode<K, V>* n) const {
     }
 }
 
-
+/**
+ * Tamaño del árbol
+ * 
+ * O(n)
+ * 
+ * @return tamaño del árbol
+ */
 template<class K, class V>
 int BinarySearchTree<K, V>::size() const {
-    //return size_calculator(p_root);
-    return _size;
+    return size_calculator(p_root);
+    //return _size;
 
 }
 
-
+/**
+ * Función auxiliar para calcular el tamaño
+ * 
+ * O(n)
+ * 
+ * @param node nodo recurso
+ * @return tamaño del árbol
+ */
 template<class K, class V>
 int BinarySearchTree<K, V>::size_calculator(BinaryTreeNode<K, V>* node) const {
     if (node == nullptr)
@@ -293,13 +445,20 @@ int BinarySearchTree<K, V>::size_calculator(BinaryTreeNode<K, V>* node) const {
         return (size_calculator(node->getLeft()) + size_calculator(node->getRight()) + 1);
 }
 
-
+/**
+ * Devuelve el valor de un nodo con un cierto key
+ * 
+ * O(h) donde h es la altura del árbol
+ * 
+ * @param k key
+ * @return el vector con todos los valores del key
+ */
 template<class K, class V>
 const vector<V>& BinarySearchTree<K, V>::valuesOf(const K& k) const {
     BinaryTreeNode<K, V>* temp = find(k);
     if (find(k) == nullptr)
         throw invalid_argument("No key found");
-    return find(k)->getValues();
+    return temp->getValues();
 }
 
 

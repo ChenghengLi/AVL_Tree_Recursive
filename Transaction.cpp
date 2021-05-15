@@ -13,6 +13,7 @@
 
 #include "Transaction.h"
 #include <iostream>
+#include<iomanip>
 using namespace std;
 
 Transaction::Transaction(string data, int id, float transaccio) {
@@ -44,7 +45,13 @@ float Transaction::getQuantitat() const {
 }
 
 void Transaction::print() const {
-    cout << "ID : "<<id <<" | Data : "<<data <<" | Quantitat : "<<quantitat<<endl;
+    string datos = data +","+to_string(id) +","+to_string(quantitat);
+    int len = datos.length();
+    if(len < 35){
+        for(int i = len ; i<35;i++)
+            datos += " ";
+    }
+    cout <<datos;
 }
 
 void Transaction::setData(string _data) {
